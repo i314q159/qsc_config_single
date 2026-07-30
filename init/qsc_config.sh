@@ -176,7 +176,7 @@ disk_cleaner
 
 # 安装 todesk
 todesk_install() {
-	if [ -e "/home/$USER_NAME/todesk-v4.7.2.0-amd64.deb" ]; then
+	if [ -e "/home/$USER_NAME/todesk-v4.8.6.2-amd64.deb" ]; then
 		apt-get install -y libappindicator3-dev
 		apt-get install -y /home/$USER_NAME/todesk-v4.7.2.0-amd64.deb
 	fi
