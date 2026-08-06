@@ -112,6 +112,7 @@ package_install() {
 	apt-get install -y libpcap-dev cutecom ros-noetic-jsk-visualization
 	apt install -y ros-noetic-serial ros-noetic-gtsam udev ros-noetic-geodesy
 	apt-get install -y libopenblas-dev ros-noetic-jsk-visualization libpcap-dev
+	apt install -y can-utils
 }
 package_install
 
