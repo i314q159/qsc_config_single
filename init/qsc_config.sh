@@ -416,6 +416,7 @@ EOF
 tty_config
 
 # can 口配置
+# TODO - add can1 config for new imu device
 can_config() {
 	cat >/etc/udev/rules.d/80-can.rules <<EOF
 KERNEL=="can0", SUBSYSTEM=="net", ACTION=="add", RUN+="/usr/sbin/ip link set can0 type can bitrate 500000"
@@ -423,7 +424,7 @@ KERNEL=="can0", SUBSYSTEM=="net", ACTION=="add", RUN+="/usr/sbin/ip link set can
 EOF
 
 	udevadm control --reload-rules
-	udevadm trigger
+	udevadm trigger --subsystem-match=net
 }
 can_config
 
