@@ -46,7 +46,17 @@ zip_qsc_ws() {
 			-x="qsc_ws/src/patchwork-plusplus_clean/cleaningvehicle/cmake-build-debug/*" \
 			-x="qsc_ws/src/run/cmake-build-debug/*" \
 			-x="qsc_ws/src/rs_to_velodyne/.git/*" \
-			-x="qsc_ws/src/rslidar_sdk/.git/*" &&
+			-x="qsc_ws/src/rslidar_sdk/.git/*" \
+			-x="qsc_ws/src/JudPntCldValid/cmake-build-judgepointscloud/*" \
+			-x="qsc_ws/src/patchwork-plusplus_clean/.git/*" \
+			-x="qsc_ws/src/Livox_SDK2/build/*" \
+			-x="qsc_ws/src/cleaningvehicle/*.log" \
+			-x="qsc_ws/src/*.zip" \
+			-x="qsc_ws/src/*.tgz" \
+			-x="qsc_ws/src/topic_record/map_record_bag/*" \
+			-x="qsc_ws/src/rslidar_sdk/doc/*" \
+			-x="qsc_ws/src/ray_imu/doc/*" \
+			-x="qsc_ws/src/rslidar_sdk/src/rs_driver/doc/*" &&
 		mv ./$QSC_ZIP "$BACKUP_TODAY"
 
 }
