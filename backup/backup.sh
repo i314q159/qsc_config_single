@@ -17,6 +17,11 @@ safe_remove() {
 	fi
 }
 
+BACKUP_ROOT="/home/$USER_NAME/backup"
+TODAY=$(date +%Y-%m-%d)
+BACKUP_TODAY=$BACKUP_ROOT/$TODAY
+mkdir -pv "$BACKUP_TODAY"
+
 zip_qsc_ws() {
 	safe_remove "/home/$USER_NAME/$QSC_ZIP"
 
@@ -39,7 +44,10 @@ zip_qsc_ws() {
 			-x="qsc_ws/src/secletpath/cmake-build-debug/*" \
 			-x="qsc_ws/src/log_bag/cmake-build-debug/*" \
 			-x="qsc_ws/src/patchwork-plusplus_clean/cleaningvehicle/cmake-build-debug/*" \
-			-x="qsc_ws/src/run/cmake-build-debug/*"
+			-x="qsc_ws/src/run/cmake-build-debug/*" \
+			-x="qsc_ws/src/rs_to_velodyne/.git/*" \
+			-x="qsc_ws/src/rslidar_sdk/.git/*" &&
+		mv ./$QSC_ZIP "$BACKUP_TODAY"
 
 }
 zip_qsc_ws
