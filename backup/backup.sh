@@ -32,9 +32,6 @@ zip_qsc_ws() {
 			-x="qsc_ws/src/topic_record/*.log" \
 			-x="qsc_ws/src/ros_pub/rotating.*" \
 			-x="qsc_ws/src/Livox-SDK2/build/*" \
-			-x="qsc_ws/src/addObsMap.tgz" \
-			-x="qsc_ws/src/qscmap.tgz" \
-			-x="qsc_ws/src/realMap.tgz" \
 			-x="qsc_ws/hybrid_map/*" \
 			-x="qsc_ws/lowmap/*" \
 			-x="qsc_ws/src/run/cmake-build-debug/*" \
