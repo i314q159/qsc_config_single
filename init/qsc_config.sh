@@ -263,7 +263,6 @@ qsc_ws_config() {
 	if [ -e "/home/$USER_NAME/qsc_ws.zip" ]; then
 		safe_remove $QSC_WORKSPACE
 
-		# TODO - rename qsc_ws.zip
 		unzip -q -o /home/$USER_NAME/qsc_ws.zip "qsc_ws/*" -d /home/$USER_NAME/
 		unzip -q -o /home/$USER_NAME/qsc_ws.zip "qsc.sh" -d /home/$USER_NAME/
 
@@ -299,9 +298,10 @@ pack_config() {
 	if [ -e "/home/$USER_NAME/pack.zip" ]; then
 		sudo -u $USER_NAME unzip -q -o /home/$USER_NAME/pack.zip -d /home/$USER_NAME/
 		sudo -u $USER_NAME ln -s /home/$USER_NAME/pack/ROS_Qt_Test-x86_64.AppImage /home/$USER_NAME/桌面/
-		sudo -u $USER_NAME mkdir -pv /home/$USER_NAME/bag/
-		sudo -u $USER_NAME mkdir -pv /home/$USER_NAME/guanjiandian/
 	fi
+
+	sudo -u $USER_NAME mkdir -pv /home/$USER_NAME/bag/
+	sudo -u $USER_NAME mkdir -pv /home/$USER_NAME/guanjiandian/
 }
 pack_config
 
