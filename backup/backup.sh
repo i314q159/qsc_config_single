@@ -53,6 +53,7 @@ zip_qsc_ws() {
 			-x="qsc_ws/src/topic_record/map_record_bag/*" \
 			-x="qsc_ws/src/rslidar_sdk/doc/*" \
 			-x="qsc_ws/src/ray_imu/doc/*" \
+			-x="qsc_ws/src/rslidar_sdk/rs_driver-main/doc/*" \
 			-x="qsc_ws/src/rslidar_sdk/src/rs_driver/doc/*" &&
 		mv ./$QSC_ZIP "$BACKUP_TODAY"
 
