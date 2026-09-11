@@ -31,5 +31,22 @@ backup_map() {
 	if [ -e "$QSC_WORKSPACE/config/cxy_fugai.txt" ]; then
 		cp $QSC_WORKSPACE/config/cxy_fugai.txt "$THREE_MAPS/"
 	fi
+
+	if [ -e "$QSC_WORKSPACE/customPath/" ]; then
+		cd $QSC_WORKSPACE && tar -zcvf customPath.tgz customPath/ && mv ./customPath.tgz "$THREE_MAPS/"
+	fi
+
+	if [ -e "$QSC_WORKSPACE/config/config.txt" ]; then
+		cp $QSC_WORKSPACE/config/config.txt "$THREE_MAPS/"
+	fi
+
+	if [ -e "$QSC_WORKSPACE_SRC/lidar_get_reflector/config/params_ls2pc_filter.yaml" ]; then
+		cp $QSC_WORKSPACE_SRC/lidar_get_reflector/config/params_ls2pc_filter.yaml "$THREE_MAPS/"
+	fi
+
+	if [ -e "$QSC_WORKSPACE_SRC/lidar_get_reflector/config/params.yaml" ]; then
+		cp $QSC_WORKSPACE_SRC/lidar_get_reflector/config/params.yaml "$THREE_MAPS/"
+	fi
+
 }
 backup_map
