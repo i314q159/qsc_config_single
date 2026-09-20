@@ -5,9 +5,12 @@ REQUIRE_UBUNTU_VERSION="20.04"
 
 # 用户名
 USER_NAME="admin1"
+QSC_ZIP="qsc_ws.zip"
 
-# qsc 工作空间名
+# qsc_ws
 QSC_WORKSPACE="/home/$USER_NAME/qsc_ws"
+QSC_WORKSPACE_BUILD="$QSC_WORKSPACE/build"
+QSC_WORKSPACE_DEVEL="$QSC_WORKSPACE/devel"
 
 HOST_NAME="qsc"
 
@@ -263,14 +266,15 @@ qsc_ws_config() {
 	if [ -e "/home/$USER_NAME/qsc_ws.zip" ]; then
 		safe_remove $QSC_WORKSPACE
 
-		unzip -q -o /home/$USER_NAME/qsc_ws.zip "qsc_ws/*" -d /home/$USER_NAME/
-		unzip -q -o /home/$USER_NAME/qsc_ws.zip "qsc.sh" -d /home/$USER_NAME/
+		unzip -q -o /home/$USER_NAME/$QSC_ZIP "qsc_ws/*" -d /home/$USER_NAME/
+		unzip -q -o /home/$USER_NAME/$QSC_ZIP "qsc.sh" -d /home/$USER_NAME/
 
 		# 删除上一台车的编译产物
-		safe_remove $QSC_WORKSPACE/build/
-		safe_remove $QSC_WORKSPACE/devel/
+		safe_remove $QSC_WORKSPACE_BUILD
+		safe_remove $QSC_WORKSPACE_DEVEL
 
 		# 编译主程序
+		# shellcheck source=/dev/null
 		source /opt/ros/noetic/setup.sh
 
 		catkin_make \

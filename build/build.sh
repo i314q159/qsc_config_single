@@ -3,8 +3,10 @@
 # 用户名
 USER_NAME="admin1"
 
-# qsc 工作空间名
+# qsc_ws
 QSC_WORKSPACE="/home/$USER_NAME/qsc_ws"
+QSC_WORKSPACE_BUILD="$QSC_WORKSPACE/build"
+QSC_WORKSPACE_DEVEL="$QSC_WORKSPACE/devel"
 
 safe_remove() {
 	local file_path="$1"
@@ -19,13 +21,14 @@ safe_remove() {
 	fi
 }
 
-qsc_master() {
+qsc_ws() {
 	if [ -e "/home/$USER_NAME/qsc_ws" ]; then
 		# 删除上一台车的编译产物
-		safe_remove "$QSC_WORKSPACE/build/"
-		safe_remove "$QSC_WORKSPACE/devel/"
+		safe_remove $QSC_WORKSPACE_BUILD
+		safe_remove $QSC_WORKSPACE_DEVEL
 
 		# 编译主程序
+		# shellcheck source=/dev/null
 		source /opt/ros/noetic/setup.sh
 
 		catkin_make \
@@ -44,4 +47,4 @@ qsc_master() {
 		echo "请检查qws_ws位置"
 	fi
 }
-qsc_master
+qsc_ws
