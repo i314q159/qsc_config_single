@@ -30,7 +30,7 @@ remove_old_pack
 
 pack_config() {
 	if [ ! -e "./pack.zip" ]; then
-		sudo -u "${USER_NAME}" curl -fSL "http://jiqiren.zkzc123.com/qsc_soft/pack.zip" -o ./pack.zip
+		sudo -u "${USER_NAME}" curl -fSL "https://jiqiren.zkzc123.com/qsc_soft/pack.zip" -o ./pack.zip
 	fi
 
 	sudo -u $USER_NAME unzip -q -o ./pack.zip -d /home/$USER_NAME/

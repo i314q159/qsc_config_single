@@ -96,7 +96,7 @@ remove_qsc_ws
 
 # 下载平台上的 qsc_ws.zip
 dl_qsc_ws() {
-	local QSC_WS_URL="http://jiqiren.zkzc123.com/qsc_soft/qsc_ws.zip"
+	local QSC_WS_URL="https://jiqiren.zkzc123.com/qsc_soft/qsc_ws.zip"
 
 	safe_remove "/home/$USER_NAME/$QSC_ZIP"
 
@@ -159,7 +159,7 @@ update_map
 
 # TODO - 雷达补丁
 # update_lidar() {
-# 	local LIDAR_URL="http://jiqiren.zkzc123.com/qsc_soft/lidar_fairy_48_airy.zip"
+# 	local LIDAR_URL="https://jiqiren.zkzc123.com/qsc_soft/lidar_fairy_48_airy.zip"
 # }
 # update_lidar
 
