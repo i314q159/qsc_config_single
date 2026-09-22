@@ -19,6 +19,14 @@ safe_remove() {
 	fi
 }
 
+kill_qsc() {
+	pkill -f roslaunch
+	rosnode kill -a
+	pkill rosmaster
+	pkill rosout
+}
+kill_qsc
+
 update_map() {
 	if [ -e "./addObsMap.tgz" ]; then
 		safe_remove $QSC_WORKSPACE_SRC/addobsmap/

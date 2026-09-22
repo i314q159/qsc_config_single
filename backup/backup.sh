@@ -22,6 +22,14 @@ TODAY=$(date +%Y-%m-%d)
 BACKUP_TODAY=$BACKUP_ROOT/$TODAY
 mkdir -pv "$BACKUP_TODAY"
 
+kill_qsc() {
+	pkill -f roslaunch
+	rosnode kill -a
+	pkill rosmaster
+	pkill rosout
+}
+kill_qsc
+
 zip_qsc_ws() {
 	safe_remove "/home/$USER_NAME/$QSC_ZIP"
 

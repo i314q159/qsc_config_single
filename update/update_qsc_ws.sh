@@ -24,6 +24,14 @@ safe_remove() {
 	fi
 }
 
+kill_qsc() {
+	pkill -f roslaunch
+	rosnode kill -a
+	pkill rosmaster
+	pkill rosout
+}
+kill_qsc
+
 # 备份完整 qsc_ws 空间，不做压缩黑名单处理
 backup_qsc_ws() {
 	BACKUP_ROOT="/home/$USER_NAME/backup"

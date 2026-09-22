@@ -8,6 +8,14 @@ THREE_MAPS_ROOT="/home/$USER_NAME/3maps"
 TODAY=$(date +%Y-%m-%d)
 THREE_MAPS=$THREE_MAPS_ROOT/$TODAY
 
+kill_qsc() {
+	pkill -f roslaunch
+	rosnode kill -a
+	pkill rosmaster
+	pkill rosout
+}
+kill_qsc
+
 backup_map() {
 	mkdir -pv $THREE_MAPS_ROOT
 	mkdir -pv "$THREE_MAPS"
