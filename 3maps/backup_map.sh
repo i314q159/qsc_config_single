@@ -24,12 +24,16 @@ backup_map() {
 		cd $QSC_WORKSPACE_SRC && tar -zcvf realMap.tgz realmap/ && mv ./realMap.tgz "$THREE_MAPS/"
 	fi
 
-	if [ -e "$QSC_WORKSPACE/config/cxy_yanbian.txt" ]; then
-		cp $QSC_WORKSPACE/config/cxy_yanbian.txt "$THREE_MAPS/"
+	# 适配多层轨迹：备份所有 cxy_yanbian*.txt
+	FILE_LIST_YANBIAN=("$QSC_WORKSPACE"/config/cxy_yanbian*.txt)
+	if [[ ${#FILE_LIST_YANBIAN[@]} -gt 0 ]]; then
+		cp "${FILE_LIST_YANBIAN[@]}" "$THREE_MAPS/"
 	fi
 
-	if [ -e "$QSC_WORKSPACE/config/cxy_fugai.txt" ]; then
-		cp $QSC_WORKSPACE/config/cxy_fugai.txt "$THREE_MAPS/"
+	# 适配多层轨迹：备份所有 cxy_fugai*.txt
+	FILE_LIST_FUGAI=("$QSC_WORKSPACE"/config/cxy_fugai*.txt)
+	if [[ ${#FILE_LIST_FUGAI[@]} -gt 0 ]]; then
+		cp "${FILE_LIST_FUGAI[@]}" "$THREE_MAPS/"
 	fi
 
 	if [ -e "$QSC_WORKSPACE/customPath/" ]; then

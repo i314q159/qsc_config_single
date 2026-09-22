@@ -60,12 +60,14 @@ backup_map() {
 		cd $QSC_WORKSPACE_SRC && tar -zcvf realMap.tgz realmap/ && mv ./realMap.tgz "$THREE_MAPS/"
 	fi
 
-	if [ -e "$QSC_WORKSPACE/config/cxy_yanbian.txt" ]; then
-		cp $QSC_WORKSPACE/config/cxy_yanbian.txt "$THREE_MAPS/"
+	FILE_LIST_YANBIAN=("$QSC_WORKSPACE"/config/cxy_yanbian*.txt)
+	if [[ ${#FILE_LIST_YANBIAN[@]} -gt 0 ]]; then
+		cp "${FILE_LIST_YANBIAN[@]}" "$THREE_MAPS/"
 	fi
 
-	if [ -e "$QSC_WORKSPACE/config/cxy_fugai.txt" ]; then
-		cp $QSC_WORKSPACE/config/cxy_fugai.txt "$THREE_MAPS/"
+	FILE_LIST_FUGAI=("$QSC_WORKSPACE"/config/cxy_fugai*.txt)
+	if [[ ${#FILE_LIST_FUGAI[@]} -gt 0 ]]; then
+		cp "${FILE_LIST_FUGAI[@]}" "$THREE_MAPS/"
 	fi
 
 	if [ -e "$QSC_WORKSPACE/customPath/" ]; then
@@ -132,12 +134,16 @@ update_map() {
 		cd "$THREE_MAPS" && tar -zxvf "./realMap.tgz" -C $QSC_WORKSPACE_SRC/
 	fi
 
-	if [ -e "$THREE_MAPS/cxy_yanbian.txt" ]; then
-		cp "$THREE_MAPS/cxy_yanbian.txt" $QSC_WORKSPACE/config/
+	# 适配多层轨迹：恢复所有 cxy_yanbian*.txt
+	FILE_LIST_YANBIAN=("$THREE_MAPS/cxy_yanbian"*.txt)
+	if [[ ${#FILE_LIST_YANBIAN[@]} -gt 0 ]]; then
+		cp "${FILE_LIST_YANBIAN[@]}" "$QSC_WORKSPACE/config/"
 	fi
+	# 适配多层轨迹：恢复所有 cxy_fugai*.txt
+	FILE_LIST_FUGAI=("$THREE_MAPS/cxy_fugai"*.txt)
+	if [[ ${#FILE_LIST_FUGAI[@]} -gt 0 ]]; then
+		cp "${FILE_LIST_FUGAI[@]}" "$QSC_WORKSPACE/config/"
 
-	if [ -e "$THREE_MAPS/cxy_fugai.txt" ]; then
-		cp "$THREE_MAPS/cxy_fugai.txt" $QSC_WORKSPACE/config/
 	fi
 
 	if [ -e "$THREE_MAPS/customPath.tgz" ]; then

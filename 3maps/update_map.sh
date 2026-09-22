@@ -44,12 +44,16 @@ update_map() {
 		tar -zxvf ./realMap.tgz -C $QSC_WORKSPACE_SRC/
 	fi
 
-	if [ -e "./cxy_yanbian.txt" ]; then
-		cp ./cxy_yanbian.txt $QSC_WORKSPACE/config/
+	# 适配多层轨迹：恢复所有 cxy_yanbian*.txt
+	FILES_YANBIAN=(./cxy_yanbian*.txt)
+	if [[ ${#FILES_YANBIAN[@]} -gt 0 ]]; then
+		cp "${FILES_YANBIAN[@]}" "$QSC_WORKSPACE/config/"
 	fi
 
-	if [ -e "./cxy_fugai.txt" ]; then
-		cp ./cxy_fugai.txt $QSC_WORKSPACE/config/
+	# 适配多层轨迹：恢复所有 cxy_fugai*.txt
+	FILES_FUGAI=(./cxy_fugai*.txt)
+	if [[ ${#FILES_FUGAI[@]} -gt 0 ]]; then
+		cp "${FILES_FUGAI[@]}" "$QSC_WORKSPACE/config/"
 	fi
 
 	if [ -e "./customPath.tgz" ]; then
@@ -70,31 +74,11 @@ update_map() {
 update_map
 
 build_map() {
+	# shellcheck source=/dev/null
 	source /opt/ros/noetic/setup.sh
-	if [ -e "$QSC_WORKSPACE_SRC/addobsmap/" ]; then
-		catkin_make \
-			-C $QSC_WORKSPACE \
-			-j 16 \
-			--pkg addobsmap \
-			-DENABLE_TRANSFORM=ON
-	fi
-
-	source /opt/ros/noetic/setup.sh
-	if [ -e "$QSC_WORKSPACE_SRC/qscmap/" ]; then
-		catkin_make \
-			-C $QSC_WORKSPACE \
-			-j 16 \
-			--pkg qscmap \
-			-DENABLE_TRANSFORM=ON
-	fi
-
-	source /opt/ros/noetic/setup.sh
-	if [ -e "$QSC_WORKSPACE_SRC/realmap/" ]; then
-		catkin_make \
-			-C $QSC_WORKSPACE \
-			-j 16 \
-			--pkg realmap \
-			-DENABLE_TRANSFORM=ON
-	fi
+	catkin_make \
+		-C $QSC_WORKSPACE \
+		-j 16 \
+		-DENABLE_TRANSFORM=ON
 }
 build_map
