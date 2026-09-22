@@ -78,7 +78,7 @@ build_map() {
 	source /opt/ros/noetic/setup.sh
 	catkin_make \
 		-C $QSC_WORKSPACE \
-		-j 16 \
+		-j"$(nproc)" \
 		-DENABLE_TRANSFORM=ON
 }
 build_map

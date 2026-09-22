@@ -279,7 +279,7 @@ qsc_ws_config() {
 
 		catkin_make \
 			-C $QSC_WORKSPACE \
-			-j 16 \
+			-j"$(nproc)" \
 			-DENABLE_TRANSFORM=ON
 
 		chmod +x /home/$USER_NAME/qsc.sh
@@ -319,14 +319,14 @@ li_test_config() {
 
 		catkin_make \
 			-C /home/$USER_NAME/li_test/sc-lio-loam-one \
-			-j 16
+			-j"$(nproc)"
 
 		safe_remove /home/$USER_NAME/li_test/sc-lio-loam-two/devel/
 		safe_remove /home/$USER_NAME/li_test/sc-lio-loam-two/build/
 
 		catkin_make \
 			-C /home/$USER_NAME/li_test/sc-lio-loam-two \
-			-j 16
+			-j"$(nproc)"
 
 		# 修复文件权限
 		chown $USER_NAME:$USER_NAME -R /home/$USER_NAME/li_test/
@@ -345,7 +345,7 @@ stlink_config() {
 		# 在 build 下编译
 		cd /home/$USER_NAME/stlink/ &&
 			cmake -B build -S . &&
-			cmake --build build -- -j 16
+			cmake --build build -- -j"$(nproc)"
 
 		# 拷贝编译产物
 		cp /home/$USER_NAME/stlink/build/bin/st-* /usr/local/bin

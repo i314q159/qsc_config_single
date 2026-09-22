@@ -21,6 +21,28 @@ safe_remove() {
 	fi
 }
 
+li_test() {
+	if [ -e "/home/$USER_NAME/li_test/" ]; then
+
+		safe_remove /home/$USER_NAME/li_test/sc-lio-loam-one/devel/
+		safe_remove /home/$USER_NAME/li_test/sc-lio-loam-one/build/
+
+		catkin_make \
+			-C /home/$USER_NAME/li_test/sc-lio-loam-one \
+			-j"$(nproc)"
+
+		safe_remove /home/$USER_NAME/li_test/sc-lio-loam-two/devel/
+		safe_remove /home/$USER_NAME/li_test/sc-lio-loam-two/build/
+
+		catkin_make \
+			-C /home/$USER_NAME/li_test/sc-lio-loam-two \
+			-j"$(nproc)"
+
+		chown $USER_NAME:$USER_NAME -R /home/$USER_NAME/li_test/
+	fi
+}
+li_test
+
 qsc_ws() {
 	if [ -e "/home/$USER_NAME/qsc_ws" ]; then
 		# 删除上一台车的编译产物
@@ -33,7 +55,7 @@ qsc_ws() {
 
 		catkin_make \
 			-C $QSC_WORKSPACE \
-			-j 16 \
+			-j"$(nproc)" \
 			-DENABLE_TRANSFORM=ON
 
 		chmod +x /home/$USER_NAME/qsc.sh
@@ -44,7 +66,7 @@ qsc_ws() {
 		chown $USER_NAME:$USER_NAME /home/$USER_NAME/qsc.sh
 
 	else
-		echo "请检查qws_ws位置"
+		echo "请检查qss_ws位置"
 	fi
 }
 qsc_ws

@@ -182,13 +182,13 @@ qsc_ws() {
 
 		catkin_make \
 			-C $QSC_WORKSPACE \
-			-j 16 \
+			-j"$(nproc)" \
 			-DENABLE_TRANSFORM=ON
 
 		chmod +x /home/$USER_NAME/qsc.sh
 
 	else
-		echo "请检查qws_ws位置"
+		echo "请检查qss_ws位置"
 	fi
 }
 qsc_ws
