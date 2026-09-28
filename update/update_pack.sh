@@ -4,26 +4,20 @@ set -euo pipefail
 
 USER_NAME="admin1"
 
-safe_remove() {
-	local file_path="$1"
-
-	local allowed_dir="/home/$USER_NAME/"
-
-	local real_file
-	real_file=$(realpath -m "${file_path}")
-
-	if [[ "${real_file}" == "${allowed_dir}"* && -e "${file_path}" ]]; then
-		rm -rf "${file_path}"
+rm_dir_if_exists() {
+	if [ $# -eq 1 ]; then
+		local dir="$1"
+		[ -d "$dir" ] && rm -rf -- "$dir"
 	fi
 }
 
 remove_old_pack() {
 	if [ -e "/home/$USER_NAME/pack/" ]; then
-		safe_remove "/home/$USER_NAME/pack/"
+		rm_dir_if_exists "/home/$USER_NAME/pack/"
 	fi
 
 	if [ -e "/home/$USER_NAME/pack.zip" ]; then
-		safe_remove "/home/$USER_NAME/pack.zip"
+		rm_dir_if_exists "/home/$USER_NAME/pack.zip"
 	fi
 }
 remove_old_pack

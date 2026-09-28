@@ -6,16 +6,10 @@ QSC_WORKSPACE_BUILD="$QSC_WORKSPACE/build"
 QSC_WORKSPACE_LIB="$QSC_WORKSPACE/devel/lib"
 QSC_WORKSPACE_SRC="$QSC_WORKSPACE/src"
 
-safe_remove() {
-	local file_path="$1"
-
-	local allowed_dir="/home/$USER_NAME/"
-
-	local real_file
-	real_file=$(realpath -m "${file_path}")
-
-	if [[ "${real_file}" == "${allowed_dir}"* && -e "${file_path}" ]]; then
-		rm -rf "${file_path}"
+rm_dir_if_exists() {
+	if [ $# -eq 1 ]; then
+		local dir="$1"
+		[ -d "$dir" ] && rm -rf -- "$dir"
 	fi
 }
 
@@ -29,25 +23,25 @@ kill_qsc
 
 update_map() {
 	if [ -e "./addObsMap.tgz" ]; then
-		safe_remove $QSC_WORKSPACE_SRC/addobsmap/
-		safe_remove $QSC_WORKSPACE_BUILD/addobsmap/
-		safe_remove $QSC_WORKSPACE_LIB/addobsmap/
+		rm_dir_if_exists "$QSC_WORKSPACE_SRC/addobsmap/"
+		rm_dir_if_exists "$QSC_WORKSPACE_BUILD/addobsmap/"
+		rm_dir_if_exists "$QSC_WORKSPACE_LIB/addobsmap/"
 
 		tar -zxvf ./addObsMap.tgz -C $QSC_WORKSPACE_SRC/
 	fi
 
 	if [ -e "./qscmap.tgz" ]; then
-		safe_remove $QSC_WORKSPACE_SRC/qscmap/
-		safe_remove $QSC_WORKSPACE_BUILD/qscmap/
-		safe_remove $QSC_WORKSPACE_LIB/qscmap/
+		rm_dir_if_exists "$QSC_WORKSPACE_SRC/qscmap/"
+		rm_dir_if_exists "$QSC_WORKSPACE_BUILD/qscmap/"
+		rm_dir_if_exists "$QSC_WORKSPACE_LIB/qscmap/"
 
 		tar -zxvf ./qscmap.tgz -C $QSC_WORKSPACE_SRC/
 	fi
 
 	if [ -e "./realMap.tgz" ]; then
-		safe_remove $QSC_WORKSPACE_SRC/realmap/
-		safe_remove $QSC_WORKSPACE_BUILD/realmap/
-		safe_remove $QSC_WORKSPACE_LIB/realmap/
+		rm_dir_if_exists "$QSC_WORKSPACE_SRC/realmap/"
+		rm_dir_if_exists "$QSC_WORKSPACE_BUILD/realmap/"
+		rm_dir_if_exists "$QSC_WORKSPACE_LIB/realmap/"
 
 		tar -zxvf ./realMap.tgz -C $QSC_WORKSPACE_SRC/
 	fi
@@ -65,7 +59,7 @@ update_map() {
 	fi
 
 	if [ -e "./customPath.tgz" ]; then
-		safe_remove $QSC_WORKSPACE/customPath/
+		rm_dir_if_exists "$QSC_WORKSPACE/customPath/"
 
 		tar -zxvf ./customPath.tgz -C $QSC_WORKSPACE/
 	fi

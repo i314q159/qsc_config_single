@@ -14,16 +14,10 @@ QSC_WORKSPACE_DEVEL="$QSC_WORKSPACE/devel"
 
 HOST_NAME="qsc"
 
-safe_remove() {
-	local file_path="$1"
-
-	local allowed_dir="/home/$USER_NAME/"
-
-	local real_file
-	real_file=$(realpath -m "${file_path}")
-
-	if [[ "${real_file}" == "${allowed_dir}"* && -e "${file_path}" ]]; then
-		rm -rf "${file_path}"
+rm_dir_if_exists() {
+	if [ $# -eq 1 ]; then
+		local dir="$1"
+		[ -d "$dir" ] && rm -rf -- "$dir"
 	fi
 }
 
@@ -251,14 +245,14 @@ EOF
 
 qsc_ws_config() {
 	if [ -e "/home/$USER_NAME/qsc_ws.zip" ]; then
-		safe_remove $QSC_WORKSPACE
+		rm_dir_if_exists "$QSC_WORKSPACE"
 
 		unzip -q -o /home/$USER_NAME/$QSC_ZIP "qsc_ws/*" -d /home/$USER_NAME/
 		unzip -q -o /home/$USER_NAME/$QSC_ZIP "qsc.sh" -d /home/$USER_NAME/
 
 		# 删除上一台车的编译产物
-		safe_remove $QSC_WORKSPACE_BUILD
-		safe_remove $QSC_WORKSPACE_DEVEL
+		rm_dir_if_exists "$QSC_WORKSPACE_BUILD"
+		rm_dir_if_exists "$QSC_WORKSPACE_DEVEL"
 
 		# 编译主程序
 		# shellcheck source=/dev/null
@@ -299,15 +293,15 @@ li_test_config() {
 	if [ -e "/home/$USER_NAME/li_test.zip" ]; then
 		sudo -u $USER_NAME unzip -q -o /home/$USER_NAME/li_test.zip -d /home/$USER_NAME/
 
-		safe_remove /home/$USER_NAME/li_test/sc-lio-loam-one/devel/
-		safe_remove /home/$USER_NAME/li_test/sc-lio-loam-one/build/
+		rm_dir_if_exists "/home/$USER_NAME/li_test/sc-lio-loam-one/devel/"
+		rm_dir_if_exists "/home/$USER_NAME/li_test/sc-lio-loam-one/build/"
 
 		catkin_make \
 			-C /home/$USER_NAME/li_test/sc-lio-loam-one \
 			-j"$(nproc)"
 
-		safe_remove /home/$USER_NAME/li_test/sc-lio-loam-two/devel/
-		safe_remove /home/$USER_NAME/li_test/sc-lio-loam-two/build/
+		rm_dir_if_exists "/home/$USER_NAME/li_test/sc-lio-loam-two/devel/"
+		rm_dir_if_exists "/home/$USER_NAME/li_test/sc-lio-loam-two/build/"
 
 		catkin_make \
 			-C /home/$USER_NAME/li_test/sc-lio-loam-two \

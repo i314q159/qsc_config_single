@@ -11,16 +11,10 @@ QSC_WORKSPACE_DEVEL="$QSC_WORKSPACE/devel"
 # QSC_WORKSPACE_LIB="$QSC_WORKSPACE/devel/lib"
 QSC_WORKSPACE_SRC="$QSC_WORKSPACE/src"
 
-safe_remove() {
-	local file_path="$1"
-
-	local allowed_dir="/home/$USER_NAME/"
-
-	local real_file
-	real_file=$(realpath -m "${file_path}")
-
-	if [[ "${real_file}" == "${allowed_dir}"* && -e "${file_path}" ]]; then
-		rm -rf "${file_path}"
+rm_dir_if_exists() {
+	if [ $# -eq 1 ]; then
+		local dir="$1"
+		[ -d "$dir" ] && rm -rf -- "$dir"
 	fi
 }
 
@@ -38,7 +32,7 @@ backup_qsc_ws() {
 	BACKUP_TODAY=$BACKUP_ROOT/$TODAY
 	mkdir -pv "$BACKUP_TODAY"
 
-	safe_remove "/home/$USER_NAME/$QSC_ZIP"
+	rm_dir_if_exists "/home/$USER_NAME/$QSC_ZIP"
 
 	cd /home/$USER_NAME &&
 		zip -r $QSC_ZIP qsc_ws/ qsc.sh \
@@ -99,8 +93,8 @@ backup_map
 
 # 移除旧 qsc_ws
 remove_qsc_ws() {
-	safe_remove "$QSC_WORKSPACE"
-	safe_remove "/home/$USER_NAME/qsc.sh"
+	rm_dir_if_exists "$QSC_WORKSPACE"
+	rm_dir_if_exists "/home/$USER_NAME/qsc.sh"
 }
 remove_qsc_ws
 
@@ -108,7 +102,7 @@ remove_qsc_ws
 dl_qsc_ws() {
 	local QSC_WS_URL="https://jiqiren.zkzc123.com/qsc_soft/qsc_ws.zip"
 
-	safe_remove "/home/$USER_NAME/$QSC_ZIP"
+	rm_dir_if_exists "/home/$USER_NAME/$QSC_ZIP"
 
 	if [ ! -e "/home/$USER_NAME/$QSC_ZIP" ]; then
 		curl -fSL $QSC_WS_URL -o "/home/$USER_NAME/$QSC_ZIP"
@@ -125,19 +119,19 @@ update_map() {
 	THREE_MAPS=$THREE_MAPS_ROOT/$TODAY
 
 	if [ -e "$THREE_MAPS/addObsMap.tgz" ]; then
-		safe_remove $QSC_WORKSPACE_SRC/addobsmap/
+		rm_dir_if_exists "$QSC_WORKSPACE_SRC/addobsmap/"
 
 		cd "$THREE_MAPS" && tar -zxvf "./addObsMap.tgz" -C $QSC_WORKSPACE_SRC/
 	fi
 
 	if [ -e "$THREE_MAPS/qscmap.tgz" ]; then
-		safe_remove $QSC_WORKSPACE_SRC/qscmap/
+		rm_dir_if_exists "$QSC_WORKSPACE_SRC/qscmap/"
 
 		cd "$THREE_MAPS" && tar -zxvf "./qscmap.tgz" -C $QSC_WORKSPACE_SRC/
 	fi
 
 	if [ -e "$THREE_MAPS/realMap.tgz" ]; then
-		safe_remove $QSC_WORKSPACE_SRC/realmap/
+		rm_dir_if_exists "$QSC_WORKSPACE_SRC/realmap/"
 
 		cd "$THREE_MAPS" && tar -zxvf "./realMap.tgz" -C $QSC_WORKSPACE_SRC/
 	fi
@@ -155,7 +149,7 @@ update_map() {
 	fi
 
 	if [ -e "$THREE_MAPS/customPath.tgz" ]; then
-		safe_remove $QSC_WORKSPACE/customPath/
+		rm_dir_if_exists "$QSC_WORKSPACE/customPath/"
 
 		cd "$THREE_MAPS" && tar -zxvf "./customPath.tgz" -C $QSC_WORKSPACE/
 	fi
@@ -181,8 +175,8 @@ update_map
 qsc_ws() {
 	if [ -e "/home/$USER_NAME/qsc_ws" ]; then
 		# 删除上一台车的编译产物
-		safe_remove $QSC_WORKSPACE_BUILD
-		safe_remove $QSC_WORKSPACE_DEVEL
+		rm_dir_if_exists "$QSC_WORKSPACE_BUILD"
+		rm_dir_if_exists "$QSC_WORKSPACE_DEVEL"
 
 		# 编译主程序
 		# shellcheck source=/dev/null

@@ -4,16 +4,10 @@
 USER_NAME="admin1"
 QSC_ZIP="qsc_ws.zip"
 
-safe_remove() {
-	local file_path="$1"
-
-	local allowed_dir="/home/$USER_NAME/"
-
-	local real_file
-	real_file=$(realpath -m "${file_path}")
-
-	if [[ "${real_file}" == "${allowed_dir}"* && -e "${file_path}" ]]; then
-		rm -rf "${file_path}"
+rm_dir_if_exists() {
+	if [ $# -eq 1 ]; then
+		local dir="$1"
+		[ -d "$dir" ] && rm -rf -- "$dir"
 	fi
 }
 
@@ -31,7 +25,7 @@ kill_qsc() {
 kill_qsc
 
 zip_qsc_ws() {
-	safe_remove "/home/$USER_NAME/$QSC_ZIP"
+	rm_dir_if_exists "/home/$USER_NAME/$QSC_ZIP"
 
 	cd /home/$USER_NAME &&
 		zip -r $QSC_ZIP qsc_ws/ qsc.sh \
@@ -69,7 +63,7 @@ zip_qsc_ws() {
 zip_qsc_ws
 
 zip_li_test() {
-	safe_remove "/home/$USER_NAME/li_test.zip"
+	rm_dir_if_exists "/home/$USER_NAME/li_test.zip"
 
 	cd /home/$USER_NAME &&
 		zip -r li_test.zip li_test/ \
@@ -81,7 +75,7 @@ zip_li_test() {
 # zip_li_test
 
 zip_li_test_nopcd() {
-	safe_remove "/home/$USER_NAME/li_test_nopcd.zip"
+	rm_dir_if_exists "/home/$USER_NAME/li_test_nopcd.zip"
 
 	cd /home/$USER_NAME &&
 		zip -r li_test_nopcd.zip li_test/ \
@@ -94,7 +88,7 @@ zip_li_test_nopcd() {
 # zip_li_test_nopcd
 
 zip_pack() {
-	safe_remove "/home/$USER_NAME/pack.zip"
+	rm_dir_if_exists "/home/$USER_NAME/pack.zip"
 
 	cd /home/$USER_NAME &&
 		zip -r pack.zip pack/
