@@ -243,6 +243,7 @@ EOF
 	chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.config/autostart/
 }
 
+# 配置 qsc 工作空间
 qsc_ws_config() {
 	if [ -e "/home/$USER_NAME/qsc_ws.zip" ]; then
 		rm_dir_if_exists "$QSC_WORKSPACE"
@@ -394,6 +395,7 @@ enable_ssh() {
 	systemctl enable --now ssh
 }
 
+# 初始化 rviz 配置
 rviz_init() {
 	if [ -e "/home/$USER_NAME/rviz.zip" ]; then
 		sudo -u $USER_NAME unzip -q -o /home/$USER_NAME/rviz.zip -d /home/$USER_NAME/
@@ -401,27 +403,70 @@ rviz_init() {
 }
 
 main() {
+	# 检查脚本执行权限
 	check_root_privileges
+
+	# 检查系统版本号
 	check_os_version
+
+	# 校对时间
 	setup_timezone
+
+	# 关闭系统升级
 	disable_upgrade
+
+	# 开机无密码自动登录
 	enable_automatic_login
+
+	# gnome desktop 的设置
 	disable_gsettings
+
+	# 屏蔽系统休眠单元
 	disable_sleep
+
+	# 更新镜像站
 	update_mirror
+
+	# 需要先安装过 ros ，添加过相关软件源
 	package_install
+
+	# hostname
 	setup_hostname
+
+	# 磁盘清理
 	disk_cleaner
+
+	# 安装 todesk
 	todesk_install
+
+	# todesk 监控
 	todesk_monitor
+
+	# 配置 qsc 工作空间
 	qsc_ws_config
+
+	# 配置 qt 程序
 	pack_config
+
+	# 配置定位程序
 	li_test_config
+
+	# 配置 stlink
 	stlink_config
+
+	# 安装刷底层固件的程序
 	stm32cubeprg_config
+
+	# imu 串口配置
 	tty_config
+
+	# can 口配置
 	can_config
+
+	# 开启 ssh 作为现场调试手段
 	enable_ssh
+
+	# 初始化 rviz 配置
 	rviz_init
 }
 
