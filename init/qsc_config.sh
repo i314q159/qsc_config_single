@@ -35,7 +35,6 @@ check_root_privileges() {
 		exit 1
 	fi
 }
-check_root_privileges
 
 # 检查系统版本号
 check_os_version() {
@@ -48,21 +47,18 @@ check_os_version() {
 		exit 1
 	fi
 }
-check_os_version
 
 # 校对时间
 setup_timezone() {
 	timedatectl set-timezone Asia/Shanghai
 	timedatectl set-ntp true
 }
-setup_timezone
 
 # 关闭系统升级
 disable_upgrade() {
 	systemctl disable --now unattended-upgrades.service
 	apt remove -y unattended-upgrades update-manager
 }
-disable_upgrade
 
 # 开机无密码自动登录
 enable_automatic_login() {
@@ -87,7 +83,6 @@ EOF
 	fi
 
 }
-enable_automatic_login
 
 # gnome desktop 的设置
 disable_gsettings() {
@@ -96,19 +91,16 @@ disable_gsettings() {
 	sudo -u $USER_NAME gsettings set org.gnome.desktop.screensaver idle-activation-enabled false
 	sudo -u $USER_NAME gsettings set org.gnome.desktop.interface enable-animations false
 }
-disable_gsettings
 
 # 屏蔽系统休眠单元
 disable_sleep() {
 	systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
 }
-disable_sleep
 
 # 更新镜像站
 update_mirror() {
 	apt update -y
 }
-update_mirror
 
 # 需要先安装过 ros ，添加过相关软件源
 package_install() {
@@ -117,13 +109,11 @@ package_install() {
 	apt-get install -y libopenblas-dev ros-noetic-jsk-visualization libpcap-dev
 	apt install -y can-utils
 }
-package_install
 
 # hostname
 setup_hostname() {
 	hostnamectl set-hostname --static $HOST_NAME
 }
-setup_hostname
 
 # 磁盘清理
 disk_cleaner() {
@@ -176,7 +166,6 @@ EOF
 	systemctl daemon-reload
 	systemctl enable --now disk-cleaner.timer
 }
-disk_cleaner
 
 # 安装 todesk
 todesk_install() {
@@ -185,7 +174,6 @@ todesk_install() {
 		apt-get install -y /home/$USER_NAME/todesk-v4.8.6.2-amd64.deb
 	fi
 }
-todesk_install
 
 # todesk 监控
 todesk_monitor() {
@@ -239,7 +227,6 @@ EOF
 
 	systemctl enable --now todesk-monitor.timer
 }
-todesk_monitor
 
 autostart() {
 	mkdir -pv /home/$USER_NAME/.config/autostart
@@ -295,7 +282,6 @@ qsc_ws_config() {
 		echo "请检查清扫车主机程序压缩包下载位置"
 	fi
 }
-qsc_ws_config
 
 # 配置 qt 程序
 pack_config() {
@@ -307,7 +293,6 @@ pack_config() {
 	sudo -u $USER_NAME mkdir -pv /home/$USER_NAME/bag/
 	sudo -u $USER_NAME mkdir -pv /home/$USER_NAME/guanjiandian/
 }
-pack_config
 
 # 配置定位程序
 li_test_config() {
@@ -332,7 +317,6 @@ li_test_config() {
 		chown $USER_NAME:$USER_NAME -R /home/$USER_NAME/li_test/
 	fi
 }
-li_test_config
 
 # 配置 stlink
 stlink_config() {
@@ -361,7 +345,6 @@ stlink_config() {
 		echo "stlink 编译失败"
 	fi
 }
-stlink_config
 
 # 安装刷底层固件的程序
 stm32cubeprg_config() {
@@ -386,7 +369,6 @@ stm32cubeprg_config() {
 	fi
 
 }
-stm32cubeprg_config
 
 # imu 串口配置
 tty_config() {
@@ -399,7 +381,6 @@ EOF
 	udevadm control --reload-rules
 	udevadm trigger
 }
-tty_config
 
 # can 口配置
 # TODO - add can1 config for new imu device
@@ -412,18 +393,42 @@ EOF
 	udevadm control --reload-rules
 	udevadm trigger --subsystem-match=net
 }
-can_config
 
 # 开启 ssh 作为现场调试手段
 enable_ssh() {
 	apt install -y openssh-server
 	systemctl enable --now ssh
 }
-enable_ssh
 
 rviz_init() {
 	if [ -e "/home/$USER_NAME/rviz.zip" ]; then
 		sudo -u $USER_NAME unzip -q -o /home/$USER_NAME/rviz.zip -d /home/$USER_NAME/
 	fi
 }
-rviz_init
+
+main() {
+	check_root_privileges
+	check_os_version
+	setup_timezone
+	disable_upgrade
+	enable_automatic_login
+	disable_gsettings
+	disable_sleep
+	update_mirror
+	package_install
+	setup_hostname
+	disk_cleaner
+	todesk_install
+	todesk_monitor
+	qsc_ws_config
+	pack_config
+	li_test_config
+	stlink_config
+	stm32cubeprg_config
+	tty_config
+	can_config
+	enable_ssh
+	rviz_init
+}
+
+main
