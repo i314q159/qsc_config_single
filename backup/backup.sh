@@ -11,18 +11,15 @@ rm_dir_if_exists() {
 	fi
 }
 
-BACKUP_ROOT="/home/$USER_NAME/backup"
-TODAY=$(date +%Y-%m-%d)
-BACKUP_TODAY=$BACKUP_ROOT/$TODAY
-mkdir -pv "$BACKUP_TODAY"
-
 kill_qsc() {
+	# shellcheck source=/dev/null
+	source /opt/ros/noetic/setup.sh
+
 	pkill -f roslaunch
 	rosnode kill -a
 	pkill rosmaster
 	pkill rosout
 }
-kill_qsc
 
 zip_qsc_ws() {
 	rm_dir_if_exists "/home/$USER_NAME/$QSC_ZIP"
@@ -60,7 +57,6 @@ zip_qsc_ws() {
 		mv ./$QSC_ZIP "$BACKUP_TODAY"
 
 }
-zip_qsc_ws
 
 zip_li_test() {
 	rm_dir_if_exists "/home/$USER_NAME/li_test.zip"
@@ -70,9 +66,9 @@ zip_li_test() {
 			-x="li_test/sc-lio-loam-one/devel/*" \
 			-x="li_test/sc-lio-loam-one/build/*" \
 			-x="li_test/sc-lio-loam-two/devel/*" \
-			-x="li_test/sc-lio-loam-two/build/*"
+			-x="li_test/sc-lio-loam-two/build/*" &&
+		mv ./li_test.zip "$BACKUP_TODAY"
 }
-# zip_li_test
 
 zip_li_test_nopcd() {
 	rm_dir_if_exists "/home/$USER_NAME/li_test_nopcd.zip"
@@ -83,14 +79,50 @@ zip_li_test_nopcd() {
 			-x="li_test/sc-lio-loam-one/build/*" \
 			-x="li_test/sc-lio-loam-two/devel/*" \
 			-x="li_test/sc-lio-loam-two/build/*" \
-			-x="li_test/PCD/*"
+			-x="li_test/PCD/*" &&
+		mv ./li_test_nopcd.zip "$BACKUP_TODAY"
 }
-# zip_li_test_nopcd
 
 zip_pack() {
 	rm_dir_if_exists "/home/$USER_NAME/pack.zip"
 
 	cd /home/$USER_NAME &&
-		zip -r pack.zip pack/
+		zip -r pack.zip pack/ &&
+		mv ./pack.zip "$BACKUP_TODAY"
 }
-# zip_pack
+
+main() {
+	BACKUP_ROOT="/home/$USER_NAME/backup"
+	TODAY=$(date +%Y-%m-%d)
+	BACKUP_TODAY="$BACKUP_ROOT/$TODAY"
+	mkdir -pv "$BACKUP_TODAY"
+
+	local targets=("$@")
+	if [ ${#targets[@]} -eq 0 ]; then
+		targets=("qsc_ws")
+	fi
+
+	kill_qsc
+
+	for target in "${targets[@]}"; do
+		case "$target" in
+		qsc_ws)
+			zip_qsc_ws
+			;;
+		li_test)
+			zip_li_test
+			;;
+		li_test_nopcd)
+			zip_li_test_nopcd
+			;;
+		pack)
+			zip_pack
+			;;
+		*)
+			echo "未知目标: $target" >&2
+			;;
+		esac
+	done
+}
+
+main "$@"
